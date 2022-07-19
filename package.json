@@ -1,0 +1,25 @@
+{
+  "name": "gis-rit-edu-phasordiag",
+  "version": "1.0.0",
+  "description": "Phasor Diagram",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "test": "grafana-toolkit plugin:test",
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch",
+    "sign": "grafana-toolkit plugin:sign",
+    "start": "yarn watch"
+  },
+  "author": "Christopher Piggott",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@grafana/data": "latest",
+    "@grafana/toolkit": "latest",
+    "@grafana/ui": "latest",
+    "@types/d3": "^7.4.0",
+    "emotion": "10.0.27"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
