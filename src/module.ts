@@ -1,8 +1,8 @@
 import { PanelPlugin } from '@grafana/data';
-import { SimpleOptions } from './types';
-import { SimplePanel } from './SimplePanel';
+import { PhasorDiagramOptions } from './types';
+import { PhasorDiagram } from './PhasorDiagram';
 
-export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions(builder => {
+export const plugin = new PanelPlugin<PhasorDiagramOptions>(PhasorDiagram).setPanelOptions(builder => {
   return builder
     .addTextInput({
       path: 'text',
@@ -34,7 +34,6 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
             label: 'Large',
           },
         ],
-      },
-      showIf: config => config.showSeriesCount,
+      }
     });
 });

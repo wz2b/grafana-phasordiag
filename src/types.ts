@@ -1,7 +1,3 @@
-type SeriesSize = 'sm' | 'md' | 'lg';
+export interface PhasorDiagramOptions {
 
-export interface SimpleOptions {
-  text: string;
-  showSeriesCount: boolean;
-  seriesCountSize: SeriesSize;
 }
