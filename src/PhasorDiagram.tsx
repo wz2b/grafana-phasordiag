@@ -10,7 +10,6 @@ interface Props extends PanelProps<PhasorDiagramOptions> {
 
 export const PhasorDiagram: React.FC<Props> = ({options, data, width, height}) => {
 
-    const num_major = 3
     const phasorDiagramStyles = useStyles2(() => {
         return {
             wrapper: css`
@@ -47,8 +46,13 @@ export const PhasorDiagram: React.FC<Props> = ({options, data, width, height}) =
     });
 
     const r = Math.min(width, height) / 2.0
-    const major = Array.from({ length: num_major}, (x, i) => r * (i+1)/(num_major))
-    const minor = Array.from({ length: num_major-1}, (x, i) => r * (i+1.5)/(num_major))
+
+
+    const major = Array.from({ length: options.major_gridlines},
+        (x, i) => r * (i+1)/(options.major_gridlines))
+    const minor = Array.from({ length: options.major_gridlines-1},
+        (x, i) => r * (i+1.5)/(options.major_gridlines))
+
     return (
         <div className={cx(phasorDiagramStyles.wrapper)}>
             <svg width={width} height={height} className={phasorDiagramStyles.svg}>
