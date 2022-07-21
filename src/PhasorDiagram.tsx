@@ -5,6 +5,7 @@ import {useStyles2} from '@grafana/ui';
 import {css, cx} from 'emotion';
 import u from "./util";
 import {Scale} from "./scale";
+import {Phasor} from "./phasor";
 
 interface Props extends PanelProps<PhasorDiagramOptions> {
 }
@@ -64,7 +65,32 @@ export const PhasorDiagram: React.FC<Props> = ({options, data, width, height}) =
             paper: css`
               stroke: none;
               fill: ${getColorByName(options.paper_color)}
-            `
+            `,
+
+            Ia: css`
+              fill: rgb(184, 144, 115);
+              stroke: rgb(184, 144, 115);
+
+              line {
+                stroke-width: 2px;
+                stroke-dasharray: 2, 1;
+              }
+
+              &.phase-arrow-head {
+                fill: none
+              }
+            `,
+
+            Van: css`
+              fill: rgb(184, 144, 115);
+              stroke: rgb(184, 144, 115);
+
+              line {
+                stroke-width: 2px;
+              }
+
+              &.phase-arrow-head {
+              }`
         };
     });
 
@@ -74,31 +100,38 @@ export const PhasorDiagram: React.FC<Props> = ({options, data, width, height}) =
     //
     const r = (Math.min(width, height) / 2.0) - (options.border_px || 2.0)
 
-    const s1 = new Scale(r, options.max_volts)
+    const scale = new Scale(r, options.max_volts)
 
     const major = u.linspace(0, options.max_volts, options.volts_grid)
     const minor = u.linspace(options.volts_subgrid, options.max_volts, options.volts_grid)
 
     const radials = u.linspace(0, 360, 45)
 
+    const ia = new Phasor(phasorDiagramStyles.Ia, scale)
+    const van = new Phasor(phasorDiagramStyles.Van, scale)
+
     return (
         <div className={cx(phasorDiagramStyles.wrapper)}>
             <svg width={width} height={height} className={phasorDiagramStyles.svg}>
+                <defs>
+                    {ia.markerDef}
+                    {van.markerDef}
+                </defs>
                 <g transform={u.translateToCenterTransform(height, width)}>
-                    <circle key={`minor{$v}`} className={cx(phasorDiagramStyles.paper)} cx={0} cy={0} r={r}></circle>
+                    <circle key={`minor{$v}`} className={cx(phasorDiagramStyles.paper)} cx={0} cy={0} r={r}/>
 
                     {major.map((v) => (
                         <circle key={`minor{$v}`} className={cx(phasorDiagramStyles.major)}
                                 cx={0}
                                 cy={0}
-                                r={s1.domainToRange(v)}></circle>
+                                r={scale.domainToRange(v)}/>
                     ))}
 
                     {minor.map((v) => (
                         <circle key={`minor{$v}`} className={cx(phasorDiagramStyles.minor)}
                                 cx={0}
                                 cy={0}
-                                r={s1.domainToRange(v)}></circle>
+                                r={scale.domainToRange(v)}/>
                     ))}
 
                     {radials.map((v) => (
@@ -108,18 +141,18 @@ export const PhasorDiagram: React.FC<Props> = ({options, data, width, height}) =
                               y1={0}
                               y2={0}
                               transform={`rotate(${v})`}
-                        ></line>
+                        />
 
                     ))}
 
-                    {options.nominal_volts !== 0 &&
-                    <circle className={cx(phasorDiagramStyles.nominal_ring)}
-                            cx={0}
-                            cy={0}
-                            r={s1.domainToRange(options.nominal_volts)}></circle>
+                    {options.nominal_volts !== 0 && <circle
+                        className={cx(phasorDiagramStyles.nominal_ring)}
+                        cx={0}
+                        cy={0}
+                        r={scale.domainToRange(options.nominal_volts)}/>
                     }
 
-                    <circle key={`minor{$v}`} className={cx(phasorDiagramStyles.border)} cx={0} cy={0} r={r}></circle>
+                    <circle key={`minor{$v}`} className={cx(phasorDiagramStyles.border)} cx={0} cy={0} r={r}/>
 
 
                 </g>
