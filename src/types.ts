@@ -1,7 +1,9 @@
 export interface PhasorDiagramOptions {
-    major_gridlines: number,
     max_volts: number,
     max_amps: number,
+    volts_grid: number,
+    volts_subgrid: number,
+
     ia_field: string,
     ib_field: string,
     ic_field: string,
@@ -9,8 +11,28 @@ export interface PhasorDiagramOptions {
     vb_field: string,
     vc_field: string,
 
-    has_pf: boolean,
+    nominal_volts: number,
+
+    use_nominal_pf: boolean,
     pfa_field: string,
     pfb_field: string,
-    pfc_field: string
+    pfc_field: string,
+
+    paper_color: string,
+
+    radial_color: string,
+    radial_px: number,
+
+    major_grid_color: string,
+    major_grid_px: number,
+
+    minor_grid_color: string,
+    minor_grid_px: number,
+
+    nom_value_color: string,
+    nom_value_px: number,
+
+    border_color: string,
+    border_px: number,
+
 }
