@@ -10,20 +10,29 @@ export class Marker {
         return `marker${this._id}`
     }
 
-    constructor(protected className: string) {
+    constructor(protected className: string, protected color: string = "white") {
         this._id = Marker.nextId++
     }
 
-
+    get url(): string {
+        let url = `url(#${this.id})`;
+        return url;
+    }
 
     render(): JSX.Element {
         return (
             <marker
-                id={`marker${this.id}`}
-                refX={2} refY={10}
-                markerWidth={6} markerHeight={6}
+                className={this.className}
+                stroke={this.color}
+                fill={this.color}
+                id={`${this.id}`}
+                viewBox={"0 0 20 20"}
+                refX={2}
+                refY={10}
+                markerWidth={6}
+                markerHeight={6}
                 orient={"auto"}>
-                <path d={"M 0 0 L 20 10 L 0 20 z"} className={this.className + " phase-arrow-head"}/>
+                <path d={"M 0 0 L 20 10 L 0 20 z"} />
             </marker>
         )
     }

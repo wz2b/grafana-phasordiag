@@ -11,10 +11,10 @@ export class Phasor {
         return this._marker.render()
     }
 
-    constructor(protected className: string, protected scale: Scale) {
+    constructor(protected className: string, protected scale: Scale, protected color: string = "#808080") {
         this.magnitude = 0
         this.degrees = 0
-        this._marker = new Marker(className)
+        this._marker = new Marker(className, color)
     }
 
 
@@ -24,8 +24,13 @@ export class Phasor {
 
         return(
             <g display={hidden ? "none" : "inherit"}>
-                <line x1={0} y1={0} x2={this.scale.domainToRange(this.magnitude)} y2={0}
-                      transform={`rotate(${this.degrees})`}/>
+                <line className={this.className}
+                      stroke={this.color}
+                      fill={this.color}
+                      x1={0} y1={0} x2={this.scale.domainToRange(this.magnitude)} y2={0}
+                      transform={`rotate(${this.degrees})`}
+                      markerEnd={ this._marker.url }
+                />
             </g>
         )
 

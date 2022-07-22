@@ -5,11 +5,20 @@ export interface PhasorDiagramOptions {
     volts_subgrid: number,
 
     ia_field: string,
+
     ib_field: string,
+
     ic_field: string,
-    va_field: string,
-    vb_field: string,
-    vc_field: string,
+
+    van_field: string,
+    van_color: string,
+
+    vbn_field: string,
+    vbn_color: string,
+
+    vcn_field: string,
+    vcn_color: string,
+
 
     nominal_volts: number,
 
@@ -22,6 +31,7 @@ export interface PhasorDiagramOptions {
 
     radial_color: string,
     radial_px: number,
+    radial_spacing_deg: number,
 
     major_grid_color: string,
     major_grid_px: number,

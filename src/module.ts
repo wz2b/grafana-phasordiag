@@ -12,14 +12,19 @@ export const plugin = new PanelPlugin<PhasorDiagramOptions>(PhasorDiagram).setPa
         .addNumberInput({category: ["Scaling"], defaultValue: 50, name: "Minor Grid (Volts)", path: "volts_subgrid"})
 
         /* Phase Voltages */
-        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage A", path: "va_field",})
-        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage B", path: "vb_field",})
-        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage C", path: "vc_field",})
+        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage A", path: "van_field"})
+        .addColorPicker({category: ["Phase Voltages"], defaultValue: "white", name: "Voltage A Color", path: "van_color"})
+
+        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage B", path: "vbn_field"})
+
+        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage C", path: "vcn_field"})
 
         /* Phase Currents */
-        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current A", path: "ia_field",})
-        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current B", path: "ib_field",})
-        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current C", path: "ic_field",})
+        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current A", path: "ia_field"})
+
+        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current B", path: "ib_field"})
+
+        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current C", path: "ic_field"})
 
         /* Power Factor */
         .addBooleanSwitch({
@@ -86,6 +91,19 @@ export const plugin = new PanelPlugin<PhasorDiagramOptions>(PhasorDiagram).setPa
                 max: 5.0
             }
         })
+        .addNumberInput({
+                category: ["Gridlines"],
+                defaultValue: 30.0,
+                name: "Radial Spacing (degrees)",
+                path: "radial_spacing_deg",
+
+                settings: {
+                    min: 5,
+                    max: 90,
+                    integer: true,
+                    step: 5
+                }
+            })
         .addColorPicker({
             category: ["Gridlines"],
             defaultValue: "rgb(255, 255, 255)",
