@@ -1,41 +1,44 @@
-import {Marker} from "./marker";
 import {Scale} from "./scale";
 import React from "react";
 
-export class Phasor {
-    private _marker: Marker
-    magnitude: number
-    degrees: number
+export interface PhasorProps {
+    markerId: string,
+    color: string,
+    strokeWidth: number,
+    strokeDasharray: string,
+    magnitude: number,
+    degrees: number,
+    scale: Scale
+}
 
-    get markerDef() {
-        return this._marker.render()
+export interface PhasorState {
+}
+
+export class Phasor extends React.Component<PhasorProps, PhasorState> {
+    static defaultProps = {
+        strokeWidth: 1.5,
+        strokeDasharray: "1"
     }
 
-    constructor(protected className: string, protected scale: Scale, protected color: string = "#808080") {
-        this.magnitude = 0
-        this.degrees = 0
-        this._marker = new Marker(className, color)
+    constructor(props: PhasorProps, state: PhasorState) {
+        super(props, state);
     }
-
 
     render(): JSX.Element {
-        const m = this.magnitude
+        const m = this.props.magnitude
         const hidden = (m == null || m === undefined || isNaN(m) || m === 0)
 
-        return(
+        return (
             <g display={hidden ? "none" : "inherit"}>
-                <line className={this.className}
-                      stroke={this.color}
-                      fill={this.color}
-                      x1={0} y1={0} x2={this.scale.domainToRange(this.magnitude)} y2={0}
-                      transform={`rotate(${this.degrees})`}
-                      markerEnd={ this._marker.url }
+                <line stroke={this.props.color}
+                      fill={this.props.color}
+                      strokeWidth={`${this.props.strokeWidth}px`}
+                      strokeDasharray={this.props.strokeDasharray}
+                      x1={0} y1={0} x2={this.props.scale.domainToRange(this.props.magnitude)} y2={0}
+                      transform={`rotate(-${this.props.degrees})`}
+                      markerEnd={`url(#${this.props.markerId})`}
                 />
             </g>
         )
-
     }
-
-
-
 }

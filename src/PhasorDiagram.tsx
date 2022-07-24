@@ -1,11 +1,12 @@
 import React from 'react';
-import {GrafanaTheme2, PanelProps} from '@grafana/data';
+import {DataFrame, GrafanaTheme2, PanelProps} from '@grafana/data';
 import {PhasorDiagramOptions} from 'types';
-import {useStyles2, useTheme2} from '@grafana/ui';
+import {useStyles2} from '@grafana/ui';
 import {css, cx} from 'emotion';
 import u from "./util";
 import {Scale} from "./scale";
 import {Phasor} from "./phasor";
+import {MarkerDef} from "./markerDef";
 
 interface Props extends PanelProps<PhasorDiagramOptions> {
 }
@@ -16,7 +17,20 @@ interface Props extends PanelProps<PhasorDiagramOptions> {
 // to only render parts that need rendering
 //
 export const PhasorDiagram: React.FC<Props> = ({options, data, width, height}) => {
-    const getColorByName = useTheme2().visualization.getColorByName
+    // const getColorByName = useTheme2().visualization.getColorByName
+
+    const lastValue = (data: DataFrame, name: string) => {
+        const values = data.fields.find((field) => field.name === name)?.values
+        return values?.get(values.length - 1)
+    }
+    const van_mag = lastValue(data.series[0], options.van.field)
+    const vbn_mag = lastValue(data.series[0], options.vbn.field)
+    const vcn_mag = lastValue(data.series[0], options.vcn.field)
+
+    const ia_mag = lastValue(data.series[0], options.ia.field)
+    const ib_mag = lastValue(data.series[0], options.ib.field)
+    const ic_mag = lastValue(data.series[0], options.ic.field)
+
 
     const phasorDiagramStyles = useStyles2((theme: GrafanaTheme2) => {
         const getColorByName = theme.visualization.getColorByName
@@ -67,19 +81,6 @@ export const PhasorDiagram: React.FC<Props> = ({options, data, width, height}) =
             paper: css({
                 stroke: "none",
                 fill: getColorByName(options.paper_color)
-            }),
-            VVector: css({
-                'stroke-width': "2px",
-                "&.phase-arrow-head": css({
-                    fill: "inherit"
-                })
-            }),
-            IVector: css({
-                'stroke-width': "2px",
-                'stroke-dasharray': "2, 1",
-                "&.phase-arrow-head": css({
-                    fill: "none"
-                })
             })
         }
     });
@@ -89,43 +90,22 @@ export const PhasorDiagram: React.FC<Props> = ({options, data, width, height}) =
     // that it does not get flattened out if the user choose it to be really thick
     //
     const r = (Math.min(width, height) / 2.0) - (options.border_px || 2.0)
-
     const scale = new Scale(r, options.max_volts)
-
     const major = u.linspace(0, options.max_volts, options.volts_grid)
     const minor = u.linspace(options.volts_subgrid, options.max_volts, options.volts_grid)
-
     const radials = u.linspace(0, 360, options.radial_spacing_deg || 30)
-
-    const ia = new Phasor(phasorDiagramStyles.IVector, scale, getColorByName("purple"))
-    const ib = new Phasor(phasorDiagramStyles.IVector, scale)
-    const ic = new Phasor(phasorDiagramStyles.IVector, scale)
-    const van = new Phasor(phasorDiagramStyles.VVector, scale, getColorByName(options.van_color))
-    const vbn = new Phasor(phasorDiagramStyles.VVector, scale)
-    const vcn = new Phasor(phasorDiagramStyles.VVector, scale)
-
-    van.magnitude = 277;
-    van.degrees = 0;
-
-    vbn.magnitude = 277;
-    vbn.degrees = 120;
-
-    vcn.magnitude = 277;
-    vcn.degrees = 240;
-
-    ia.magnitude = 123;
-    ia.degrees = 5;
 
     return (
         <div className={cx(phasorDiagramStyles.wrapper)}>
             <svg width={width} height={height} className={phasorDiagramStyles.svg}>
                 <defs>
-                    {ia.markerDef}
-                    {ib.markerDef}
-                    {ic.markerDef}
-                    {van.markerDef}
-                    {vbn.markerDef}
-                    {vcn.markerDef}
+                    <MarkerDef id={"vm_Van"} color={options.van.color} fill={options.van.color} size={options.arrow_size}/>
+                    <MarkerDef id={"vm_Vbn"} color={options.vbn.color} fill={options.vbn.color} size={options.arrow_size}/>
+                    <MarkerDef id={"vm_Vcn"} color={options.vcn.color} fill={options.vcn.color} size={options.arrow_size}/>
+
+                    <MarkerDef id={"vm_Ia"} color={options.ia.color} fill={"black"} size={options.arrow_size}/>
+                    <MarkerDef id={"vm_Ib"} color={options.ib.color} fill={"black"} size={options.arrow_size}/>
+                    <MarkerDef id={"vm_Ic"} color={options.ic.color} fill={"black"} size={options.arrow_size}/>
                 </defs>
                 <g transform={u.translateToCenterTransform(height, width)}>
                     <circle key={`minor{$v}`} className={cx(phasorDiagramStyles.paper)} cx={0} cy={0} r={r}/>
@@ -159,22 +139,25 @@ export const PhasorDiagram: React.FC<Props> = ({options, data, width, height}) =
                         className={cx(phasorDiagramStyles.nominal_ring)}
                         cx={0}
                         cy={0}
+
                         r={scale.domainToRange(options.nominal_volts)}/>
                     }
 
                     <circle key={`minor{$v}`} className={cx(phasorDiagramStyles.border)} cx={0} cy={0} r={r}/>
 
-                    {ia.render()}
-                    {ib.render()}
-                    {ic.render()}
-                    {van.render()}
-                    {vbn.render()}
-                    {vcn.render()}
+                    <Phasor markerId={"vm_Ia"} color={options.ia.color} magnitude={ia_mag} degrees={183} scale={scale}
+                            strokeDasharray={"4,4"}/>
+                    <Phasor markerId={"vm_Ib"} color={options.ib.color} magnitude={ib_mag} degrees={302} scale={scale}
+                            strokeDasharray={"4,4"}/>
+                    <Phasor markerId={"vm_Ic"} color={options.ic.color} magnitude={ic_mag} degrees={92} scale={scale}
+                            strokeDasharray={"4,4"}/>
+
+                    <Phasor markerId={"vm_Van"} color={options.van.color} magnitude={van_mag} degrees={5} scale={scale}/>
+                    <Phasor markerId={"vm_Vbn"} color={options.vbn.color} magnitude={vbn_mag} degrees={122} scale={scale}/>
+                    <Phasor markerId={"vm_Vcn"} color={options.vcn.color} magnitude={vcn_mag} degrees={272} scale={scale}/>
 
                 </g>
             </svg>
         </div>
     );
 }
-
-

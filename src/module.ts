@@ -4,7 +4,6 @@ import {PhasorDiagram} from './PhasorDiagram';
 
 export const plugin = new PanelPlugin<PhasorDiagramOptions>(PhasorDiagram).setPanelOptions(builder => {
     return builder
-
         /* Scaling */
         .addNumberInput({category: ["Scaling"], defaultValue: 300, name: "Max. Volts", path: "max_volts"})
         .addNumberInput({category: ["Scaling"], defaultValue: 100, name: "Max. Amperes", path: "max_amps"})
@@ -12,19 +11,54 @@ export const plugin = new PanelPlugin<PhasorDiagramOptions>(PhasorDiagram).setPa
         .addNumberInput({category: ["Scaling"], defaultValue: 50, name: "Minor Grid (Volts)", path: "volts_subgrid"})
 
         /* Phase Voltages */
-        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage A", path: "van_field"})
-        .addColorPicker({category: ["Phase Voltages"], defaultValue: "white", name: "Voltage A Color", path: "van_color"})
+        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage A-N", path: "van.field"})
+        .addColorPicker({
+            category: ["Phase Voltages"],
+            defaultValue: "rgb(184, 144, 115)",
+            name: "Voltage A-N",
+            path: "van.color"
+        })
 
-        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage B", path: "vbn_field"})
+        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage B-N", path: "vbn.field"})
+        .addColorPicker({
+            category: ["Phase Voltages"],
+            defaultValue: "rgb(255, 140, 75)",
+            name: "Voltage B-N",
+            path: "vbn.color"
+        })
 
-        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage C", path: "vcn_field"})
+        .addFieldNamePicker({category: ["Phase Voltages"], defaultValue: "", name: "Voltage C-N", path: "vcn.field"})
+        .addColorPicker({
+            category: ["Phase Voltages"],
+            defaultValue: "rgb(255, 255, 0)",
+            name: "Voltage C-N",
+            path: "vcn.color"
+        })
 
         /* Phase Currents */
-        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current A", path: "ia_field"})
+        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current A", path: "ia.field"})
+        .addColorPicker({
+            category: ["Phase Currents"],
+            defaultValue: "rgb(184, 144, 115)",
+            name: "Current A",
+            path: "ia.color"
+        })
 
-        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current B", path: "ib_field"})
+        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current B", path: "ib.field"})
+        .addColorPicker({
+            category: ["Phase Currents"],
+            defaultValue: "rgb(255, 140, 75)",
+            name: "Current B",
+            path: "ib.color"
+        })
 
-        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current C", path: "ic_field"})
+        .addFieldNamePicker({category: ["Phase Currents"], defaultValue: "", name: "Current C", path: "ic.field"})
+        .addColorPicker({
+            category: ["Phase Currents"],
+            defaultValue: "rgb(255, 255, 0)",
+            name: "Current C",
+            path: "ic.color"
+        })
 
         /* Power Factor */
         .addBooleanSwitch({
@@ -34,36 +68,56 @@ export const plugin = new PanelPlugin<PhasorDiagramOptions>(PhasorDiagram).setPa
             path: "use_nominal_pf",
         })
         .addFieldNamePicker({
-            category: ["Power Factor"], defaultValue: "", name: "Phase A Power Factor (0-2)", path: "pfa_field",
+            category: ["Power Factor"], defaultValue: "", name: "Phase A (VA)", path: "va_a_field",
             showIf(currentOptions: PhasorDiagramOptions, data: DataFrame[] | undefined): boolean | undefined {
                 return currentOptions.use_nominal_pf !== true;
             }
         })
         .addFieldNamePicker({
-            category: ["Power Factor"], defaultValue: "", name: "Phase B Power Factor (0-2)", path: "pfb_field",
+            category: ["Power Factor"], defaultValue: "", name: "Phase B (VA)", path: "va_b_field",
             showIf(currentOptions: PhasorDiagramOptions, data: DataFrame[] | undefined): boolean | undefined {
                 return currentOptions.use_nominal_pf !== true;
             }
         })
         .addFieldNamePicker({
-            category: ["Power Factor"], defaultValue: "", name: "Phase C Power Factor (0-2)", path: "pfc_field",
+            category: ["Power Factor"], defaultValue: "", name: "Phase C (VA)", path: "va_c_field",
             showIf(currentOptions: PhasorDiagramOptions, data: DataFrame[] | undefined): boolean | undefined {
                 return currentOptions.use_nominal_pf !== true;
             }
         })
 
+        .addFieldNamePicker({
+            category: ["Power Factor"], defaultValue: "", name: "Phase A (VAr)", path: "var_a_field",
+            showIf(currentOptions: PhasorDiagramOptions, data: DataFrame[] | undefined): boolean | undefined {
+                return currentOptions.use_nominal_pf !== true;
+            }
+        })
+        .addFieldNamePicker({
+            category: ["Power Factor"], defaultValue: "", name: "Phase B (VAr)", path: "var_b_field",
+            showIf(currentOptions: PhasorDiagramOptions, data: DataFrame[] | undefined): boolean | undefined {
+                return currentOptions.use_nominal_pf !== true;
+            }
+        })
+        .addFieldNamePicker({
+            category: ["Power Factor"], defaultValue: "", name: "Phase C (VAr)", path: "var_c_field",
+            showIf(currentOptions: PhasorDiagramOptions, data: DataFrame[] | undefined): boolean | undefined {
+                return currentOptions.use_nominal_pf !== true;
+            }
+        })
+
+
         /* Background and Border */
         .addColorPicker({
-            category: ["Background and Border"], defaultValue: "transparent", name: "Paper Color", path: "paper_color",
+            category: ["Background, Border, and Style"], defaultValue: "transparent", name: "Paper Color", path: "paper_color",
         })
         .addColorPicker({
-            category: ["Background and Border"],
+            category: ["Background, Border, and Style"],
             defaultValue: "rgb(255,255,255)",
             name: "Border",
             path: "border_color"
         })
         .addNumberInput({
-            category: ["Background and Border"],
+            category: ["Background, Border, and Style"],
             defaultValue: 3.0,
             name: "Border Width (px)",
             path: "border_px",
@@ -73,15 +127,22 @@ export const plugin = new PanelPlugin<PhasorDiagramOptions>(PhasorDiagram).setPa
             }
         })
 
+        .addNumberInput({
+            category: ["Background, Border, and Style"],
+            defaultValue: 10, name: "Arrow Head (px))",
+            path: "arrow_size",
+            settings: {min: 0, max: 100, step: 1}
+        })
+
         /* Grid lines and radials */
         .addColorPicker({
-            category: ["Gridlines"],
+            category: ["Background, Border, and Style"],
             defaultValue: "rgb(234, 234, 234)",
             name: "Radial Color",
             path: "radial_color"
         })
         .addNumberInput({
-            category: ["Gridlines"],
+            category: ["Background, Border, and Style"],
             defaultValue: 1.0,
             name: "Radial Grid (px)",
             path: "radial_px",
@@ -92,26 +153,26 @@ export const plugin = new PanelPlugin<PhasorDiagramOptions>(PhasorDiagram).setPa
             }
         })
         .addNumberInput({
-                category: ["Gridlines"],
-                defaultValue: 30.0,
-                name: "Radial Spacing (degrees)",
-                path: "radial_spacing_deg",
+            category: ["Background, Border, and Style"],
+            defaultValue: 30.0,
+            name: "Radial Spacing (degrees)",
+            path: "radial_spacing_deg",
 
-                settings: {
-                    min: 5,
-                    max: 90,
-                    integer: true,
-                    step: 5
-                }
-            })
+            settings: {
+                min: 5,
+                max: 90,
+                integer: true,
+                step: 5
+            }
+        })
         .addColorPicker({
-            category: ["Gridlines"],
+            category: ["Background, Border, and Style"],
             defaultValue: "rgb(255, 255, 255)",
             name: "Major Grid Color",
             path: "major_grid_color"
         })
         .addNumberInput({
-            category: ["Gridlines"],
+            category: ["Background, Border, and Style"],
             defaultValue: 1.0,
             name: "Major Grid Line (px)",
             path: "major_grid_px",
@@ -122,13 +183,13 @@ export const plugin = new PanelPlugin<PhasorDiagramOptions>(PhasorDiagram).setPa
             }
         })
         .addColorPicker({
-            category: ["Gridlines"],
+            category: ["Background, Border, and Style"],
             defaultValue: "rgb(234, 234, 234)",
             name: "Minor Grid Color",
             path: "minor_grid_color"
         })
         .addNumberInput({
-            category: ["Gridlines"],
+            category: ["Background, Border, and Style"],
             defaultValue: 1.0,
             name: "Minor Grid (px)",
             path: "minor_grid_px",

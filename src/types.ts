@@ -1,31 +1,34 @@
+
+export interface PhasorDescr {
+    field: string,
+    color: string
+}
+
 export interface PhasorDiagramOptions {
     max_volts: number,
     max_amps: number,
     volts_grid: number,
     volts_subgrid: number,
+    arrow_size: number,
 
-    ia_field: string,
+    ia: PhasorDescr,
+    ib: PhasorDescr,
+    ic: PhasorDescr,
 
-    ib_field: string,
-
-    ic_field: string,
-
-    van_field: string,
-    van_color: string,
-
-    vbn_field: string,
-    vbn_color: string,
-
-    vcn_field: string,
-    vcn_color: string,
-
+    van: PhasorDescr,
+    vbn: PhasorDescr,
+    vcn: PhasorDescr,
 
     nominal_volts: number,
 
     use_nominal_pf: boolean,
-    pfa_field: string,
-    pfb_field: string,
-    pfc_field: string,
+    va_a_field: string,
+    va_b_field: string,
+    va_c_field: string,
+    var_a_field: string,
+    var_b_field: string,
+    var_c_field: string,
+
 
     paper_color: string,
 
@@ -44,5 +47,4 @@ export interface PhasorDiagramOptions {
 
     border_color: string,
     border_px: number,
-
 }
