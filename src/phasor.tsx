@@ -26,7 +26,8 @@ export class Phasor extends React.Component<PhasorProps, PhasorState> {
 
     render(): JSX.Element {
         const m = this.props.magnitude
-        const hidden = (m == null || m === undefined || isNaN(m) || m === 0)
+        const d = this.props.degrees
+        const hidden = (m == null || m === undefined || isNaN(m) || m === 0 || isNaN(d))
 
         return (
             <g display={hidden ? "none" : "inherit"}>
@@ -34,8 +35,8 @@ export class Phasor extends React.Component<PhasorProps, PhasorState> {
                       fill={this.props.color}
                       strokeWidth={`${this.props.strokeWidth}px`}
                       strokeDasharray={this.props.strokeDasharray}
-                      x1={0} y1={0} x2={this.props.scale.domainToRange(this.props.magnitude)} y2={0}
-                      transform={`rotate(-${this.props.degrees})`}
+                      x1={0} y1={0} x2={this.props.scale.domainToRange(m)} y2={0}
+                      transform={`rotate(${-d})`}
                       markerEnd={`url(#${this.props.markerId})`}
                 />
             </g>

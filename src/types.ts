@@ -1,6 +1,13 @@
 
+
+export interface PhasorFields {
+    amps: string,
+    volts: string,
+    watts: string,
+    vars: string,
+}
 export interface PhasorDescr {
-    field: string,
+    fields: PhasorFields,
     color: string
 }
 
@@ -11,24 +18,11 @@ export interface PhasorDiagramOptions {
     volts_subgrid: number,
     arrow_size: number,
 
-    ia: PhasorDescr,
-    ib: PhasorDescr,
-    ic: PhasorDescr,
-
-    van: PhasorDescr,
-    vbn: PhasorDescr,
-    vcn: PhasorDescr,
+    a: PhasorDescr,
+    b: PhasorDescr,
+    c: PhasorDescr,
 
     nominal_volts: number,
-
-    use_nominal_pf: boolean,
-    va_a_field: string,
-    va_b_field: string,
-    va_c_field: string,
-    var_a_field: string,
-    var_b_field: string,
-    var_c_field: string,
-
 
     paper_color: string,
 
